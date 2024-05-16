@@ -76,4 +76,20 @@ describe('Restaurant and Menu Models', () => {
         const resMenus = await restaurant.getMenus()
         expect(resMenus[0] instanceof Menu).toBeTruthy()
     })
+
+    test("Menu can have multiple items", async() => {
+        const menu = await Menu.create(seedMenu[1])
+        const items = await Item.bulkCreate(seedItem)
+        await menu.addItems(items)
+        const menuItems = await menu.getItems()
+        expect(menuItems[1] instanceof Item).toBeTruthy()
+    })
+
+    test("Item can have multiple menus", async() => {
+        const menus = await Menu.bulkCreate(seedMenu)
+        const item = await Item.create(seedItem[1])
+        await item.addMenus(menus)
+        const itemMenus = await item.getMenus()
+        expect(itemMenus[1] instanceof Menu).toBeTruthy()
+    })
 })
