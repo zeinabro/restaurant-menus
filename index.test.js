@@ -1,8 +1,9 @@
 const {sequelize} = require('./db')
-const {Restaurant, Menu} = require('./models/index')
+const {Restaurant, Menu, Item} = require('./models/index')
 const {
     seedRestaurant,
     seedMenu,
+    seedItem
   } = require('./seedData');
 
 describe('Restaurant and Menu Models', () => {
@@ -26,6 +27,11 @@ describe('Restaurant and Menu Models', () => {
         expect(menu1).toEqual(expect.objectContaining(seedMenu[0]))
     });
 
+    test('can create an Item', async () => {
+        const item1 = await Item.create(seedItem[0])
+        expect(item1).toEqual(expect.objectContaining(seedItem[0]))
+    });
+
     test('can find Restaurants', async () => {
         await Restaurant.bulkCreate(seedRestaurant)
         const res1 = await Restaurant.findByPk(1)
@@ -38,6 +44,12 @@ describe('Restaurant and Menu Models', () => {
         expect(menu1).toEqual(expect.objectContaining(seedMenu[0]))
     });
 
+    test('can find Items', async () => {
+        await Item.bulkCreate(seedItem)
+        const item1 = await Item.findByPk(1)
+        expect(item1).toEqual(expect.objectContaining(seedItem[0]))
+    });
+
     test('can delete Restaurants', async () => {
         await Restaurant.destroy({where: {id:1}})
         const res1 = await Restaurant.findByPk(1)
@@ -48,6 +60,12 @@ describe('Restaurant and Menu Models', () => {
         await Menu.destroy({where: {id:1}})
         const menu1 = await Menu.findByPk(1)
         expect(menu1).toEqual(null)
+    });
+
+    test('can delete Items', async () => {
+        await Item.destroy({where: {id:1}})
+        const item1 = await Item.findByPk(1)
+        expect(item1).toEqual(null)
     });
 
     test('Restaurant can have multiple Menus', async()=>{
