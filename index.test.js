@@ -49,4 +49,13 @@ describe('Restaurant and Menu Models', () => {
         const menu1 = await Menu.findByPk(1)
         expect(menu1).toEqual(null)
     });
+
+    test('Restaurant can have multiple Menus', async()=>{
+        const restaurant = await Restaurant.create(seedRestaurant[2])
+        const menus = await Menu.bulkCreate(seedMenu)
+
+        await restaurant.addMenus(menus)
+        const resMenus = await restaurant.getMenus()
+        expect(resMenus[0] instanceof Menu).toBeTruthy()
+    })
 })
